@@ -64,26 +64,6 @@ def bookpage(isbn):
     data=db.execute("SELECT * FROM books WHERE isbn = :isbn",{"isbn":isbn}).fetchone()
     return render_template("book.html",data=data,reviews=session['reviews'],average_rating=average_rating,work_ratings_count=work_ratings_count,username=username,warning=warning)
 
-@app.route("/api/<string:isbn>")
-@login_required
-def api(isbn):
-    data=db.execute("SELECT * FROM books WHERE isbn = :isbn",{"isbn":isbn}).fetchone()
-    if data==None:
-        return render_template('404.html')
-    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "Cdjuz7jTYIwy5Jj9GhY9sw", "isbns": isbn})
-    average_rating=res.json()['books'][0]['average_rating']
-    work_ratings_count=res.json()['books'][0]['work_ratings_count']
-    x = {
-    "title": data.title,
-    "author": data.author,
-    "year": data.year,
-    "isbn": isbn,
-    "review_count": work_ratings_count,
-    "average_score": average_rating
-    }
-    api=json.dumps(x)
-    return render_template("api.json",api=api)
-
 @app.route("/login",methods=["GET","POST"])
 def login():
     log_in_message=""    
