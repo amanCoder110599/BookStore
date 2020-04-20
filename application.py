@@ -28,10 +28,7 @@ db = scoped_session(sessionmaker(bind=engine))
 @login_required
 def index():
     username=session.get('username')
-    message=Markup("""<blockquote class="blockquote p-5 mt-5">
-    <p>“A reader lives a thousand lives before he dies, said Jojen. <br>The man who never reads lives only one.”</p>
-    <footer class="blockquote-footer">George R.R. Martin, A Dance with Dragons </footer>
-  </blockquote>""")
+    message=""
     session["books"]=[]   
     if request.method=="POST":
         message=('')
